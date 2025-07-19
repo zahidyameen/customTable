@@ -4,23 +4,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.NonNull
+import android.widget.ImageView
 import com.example.tableview.R
 import com.example.tableview.table.adapter.AbstractTableAdapter
 import com.example.tableview.table.adapter.recyclerview.holder.AbstractViewHolder
-import com.example.tableview.table.sort.SortState
 import com.example.tableview.table.view.holder.CellViewHolder
 import com.example.tableview.table.view.holder.ColumnHeaderViewHolder
-import com.example.tableview.table.view.holder.GenderCellViewHolder
-import com.example.tableview.table.view.holder.MoodCellViewHolder
 import com.example.tableview.table.view.holder.RowHeaderViewHolder
 import com.example.tableview.table.view.model.Cell
 import com.example.tableview.table.view.model.ColumnHeader
 import com.example.tableview.table.view.model.RowHeader
 
-class TableViewAdapter(
-    @NonNull private val tableViewModel: TableViewModel2
-) : AbstractTableAdapter<ColumnHeader, RowHeader, Cell>() {
+class TableViewAdapter() : AbstractTableAdapter<ColumnHeader, RowHeader, Cell>() {
 
     companion object {
         private const val MOOD_CELL_TYPE = 1
@@ -31,22 +26,21 @@ class TableViewAdapter(
     override fun onCreateCellViewHolder(parent: ViewGroup, viewType: Int): AbstractViewHolder {
         Log.e(LOG_TAG, "onCreateCellViewHolder has been called")
         val inflater = LayoutInflater.from(parent.context)
-//        val layout: View = when (viewType) {
-//            MOOD_CELL_TYPE, GENDER_CELL_TYPE -> {
-//                inflater.inflate(R.layout.table_view_image_cell_layout, parent, false)
-//            }
-//            else -> {
-     val layout=inflater.inflate(R.layout.table_view_cell_layout, parent, false)
-//            }
-//        }
+        val layout = when(viewType){
+            1,2->{
+                inflater.inflate(R.layout.table_view_image_cell_layout, parent, false)
+            }
+            else -> {
+                inflater.inflate(R.layout.table_view_cell_layout, parent, false)
+            }
 
-        return  CellViewHolder(layout)
-//        when (viewType) {
-//            MOOD_CELL_TYPE -> MoodCellViewHolder(layout)
-//            GENDER_CELL_TYPE -> GenderCellViewHolder(layout)
-//            else ->
+        }
+        return when (viewType) {
+            MOOD_CELL_TYPE -> MoodCellViewHolder(layout)
+            GENDER_CELL_TYPE -> GenderCellViewHolder(layout)
+            else -> CellViewHolder(layout)
+        }
 
-//        }
     }
 
     override fun onBindCellViewHolder(
@@ -55,24 +49,34 @@ class TableViewAdapter(
         columnPosition: Int,
         rowPosition: Int
     ) {
-//        when (holder.itemViewType) {
-//            MOOD_CELL_TYPE -> {
-//                val moodHolder = holder as MoodCellViewHolder
-//
-//                moodHolder.cellImage.setImageResource(tableViewModel.getDrawable(cellItemModel?.data as Int, false))
-//            }
-//            GENDER_CELL_TYPE -> {
-//                val genderHolder = holder as GenderCellViewHolder
-//                genderHolder.cellImage.setImageResource(tableViewModel.getDrawable(cellItemModel?.data as Int, true))
-//            }
-//            else -> {
+
+        when (holder.itemViewType) {
+            MOOD_CELL_TYPE -> {
+                val moodHolder = holder as MoodCellViewHolder
+
+                moodHolder.cellImage.setImageResource(
+                    R.drawable.ic_happy
+                )
+            }
+
+            GENDER_CELL_TYPE -> {
+                val genderHolder = holder as GenderCellViewHolder
+                genderHolder.cellImage.setImageResource(
+                    R.drawable.ic_female
+                )
+            }
+
+            else -> {
                 val cellHolder = holder as CellViewHolder
                 cellHolder.setCell(cellItemModel)
-//            }
-//        }
+            }
+        }
     }
 
-    override fun onCreateColumnHeaderViewHolder(parent: ViewGroup, viewType: Int): AbstractViewHolder {
+    override fun onCreateColumnHeaderViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): AbstractViewHolder {
         val layout = LayoutInflater.from(parent.context)
             .inflate(R.layout.table_view_column_header_layout, parent, false)
         return ColumnHeaderViewHolder(layout, tableView)
@@ -106,17 +110,6 @@ class TableViewAdapter(
         val corner = LayoutInflater.from(parent.context)
             .inflate(R.layout.table_view_corner_layout, parent, false)
 
-        corner.setOnClickListener {
-            val sortState = tableView.rowHeaderSortingStatus
-            if (sortState != SortState.ASCENDING) {
-                Log.d(LOG_TAG, "Order Ascending")
-                tableView.sortRowHeader(SortState.ASCENDING)
-            } else {
-                Log.d(LOG_TAG, "Order Descending")
-                tableView.sortRowHeader(SortState.DESCENDING)
-            }
-        }
-
         return corner
     }
 
@@ -124,11 +117,43 @@ class TableViewAdapter(
 
     override fun getRowHeaderItemViewType(position: Int): Int = 0
 
-    override fun getCellItemViewType(column: Int): Int {
-        return when (column) {
-            TableViewModel.MOOD_COLUMN_INDEX -> MOOD_CELL_TYPE
-            TableViewModel.GENDER_COLUMN_INDEX -> GENDER_CELL_TYPE
+    override fun getCellItemViewType(cell: Cell): Int {
+        return when (cell.type) {
+            1 -> MOOD_CELL_TYPE
+            2 -> GENDER_CELL_TYPE
             else -> 0
         }
     }
+
+    open class MoodCellViewHolder(itemView: View) : AbstractViewHolder(itemView) {
+
+        val cellImage: ImageView = itemView.findViewById(R.id.cell_image)
+
+        open fun setData(data: Any?) {
+            val mood = data as? Int ?: return
+            val moodDrawable = if (mood == 0) {
+                R.drawable.ic_happy
+            } else {
+                R.drawable.ic_sad
+            }
+
+            cellImage.setImageResource(moodDrawable)
+        }
+    }
+
+    class GenderCellViewHolder(itemView: View) : MoodCellViewHolder(itemView) {
+
+        override fun setData(data: Any?) {
+            val gender = data as? Int ?: return
+            val genderDrawable = if (gender == 0) {
+                R.drawable.ic_male
+            } else {
+                R.drawable.ic_female
+            }
+
+            cellImage.setImageResource(genderDrawable)
+        }
+    }
+
+
 }

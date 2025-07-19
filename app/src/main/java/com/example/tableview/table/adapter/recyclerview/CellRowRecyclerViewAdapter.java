@@ -32,6 +32,7 @@ import androidx.annotation.NonNull;
 import com.example.tableview.table.view.ITableView;
 import com.example.tableview.table.adapter.ITableAdapter;
 import com.example.tableview.table.adapter.recyclerview.holder.AbstractViewHolder;
+import com.example.tableview.table.view.model.Cell;
 
 
 /**
@@ -73,7 +74,8 @@ public class CellRowRecyclerViewAdapter<C> extends AbstractRecyclerViewAdapter<C
 
     @Override
     public int getItemViewType(int position) {
-        return mTableAdapter.getCellItemViewType(position);
+        Cell cell=(Cell) getItem(position);
+        return mTableAdapter.getCellItemViewType(cell);
     }
 
     @Override

@@ -34,7 +34,6 @@ import androidx.annotation.Nullable;
 import com.example.tableview.table.view.ITableView;
 import com.example.tableview.table.adapter.ITableAdapter;
 import com.example.tableview.table.adapter.recyclerview.holder.AbstractViewHolder;
-import com.example.tableview.table.sort.RowHeaderSortHelper;
 
 import java.util.List;
 
@@ -46,7 +45,6 @@ public class RowHeaderRecyclerViewAdapter<RH> extends AbstractRecyclerViewAdapte
     @NonNull
     private final ITableAdapter mTableAdapter;
     private final ITableView mTableView;
-    private RowHeaderSortHelper mRowHeaderSortHelper;
 
     public RowHeaderRecyclerViewAdapter(@NonNull Context context, @Nullable List<RH> itemList, @NonNull ITableAdapter
             tableAdapter) {
@@ -90,12 +88,4 @@ public class RowHeaderRecyclerViewAdapter<RH> extends AbstractRecyclerViewAdapte
         viewHolder.setSelected(selectionState);
     }
 
-    @NonNull
-    public RowHeaderSortHelper getRowHeaderSortHelper() {
-        if (mRowHeaderSortHelper == null) {
-            // It helps to store sorting state of row headers
-            this.mRowHeaderSortHelper = new RowHeaderSortHelper();
-        }
-        return mRowHeaderSortHelper;
-    }
 }

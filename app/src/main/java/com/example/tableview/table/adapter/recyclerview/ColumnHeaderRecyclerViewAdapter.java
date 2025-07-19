@@ -33,10 +33,8 @@ import androidx.annotation.Nullable;
 
 import com.example.tableview.table.view.ITableView;
 import com.example.tableview.table.adapter.ITableAdapter;
-import com.example.tableview.table.adapter.recyclerview.holder.AbstractSorterViewHolder;
 import com.example.tableview.table.adapter.recyclerview.holder.AbstractViewHolder;
-import com.example.tableview.table.sort.ColumnSortHelper;
-import com.example.tableview.table.sort.SortState;
+
 
 import java.util.List;
 
@@ -48,8 +46,6 @@ public class ColumnHeaderRecyclerViewAdapter<CH> extends AbstractRecyclerViewAda
     @NonNull
     private final ITableAdapter mTableAdapter;
     private final ITableView mTableView;
-    private ColumnSortHelper mColumnSortHelper;
-
     public ColumnHeaderRecyclerViewAdapter(@NonNull Context context, @Nullable List<CH> itemList, @NonNull ITableAdapter
             tableAdapter) {
         super(context, itemList);
@@ -79,7 +75,6 @@ public class ColumnHeaderRecyclerViewAdapter<CH> extends AbstractRecyclerViewAda
 
         AbstractViewHolder.SelectionState selectionState = mTableView.getSelectionHandler().getColumnSelectionState
                 (viewHolder.getAdapterPosition());
-
         // Control to ignore selection color
         if (!mTableView.isIgnoreSelectionColors()) {
 
@@ -87,29 +82,7 @@ public class ColumnHeaderRecyclerViewAdapter<CH> extends AbstractRecyclerViewAda
             mTableView.getSelectionHandler().changeColumnBackgroundColorBySelectionStatus
                     (viewHolder, selectionState);
         }
-
         // Change selection status
         viewHolder.setSelected(selectionState);
-
-        // Control whether the TableView is sortable or not.
-        if (mTableView.isSortable()) {
-            if (viewHolder instanceof AbstractSorterViewHolder) {
-                // Get its sorting state
-                SortState state = getColumnSortHelper().getSortingStatus(viewHolder
-                        .getAdapterPosition());
-                // Fire onSortingStatusChanged
-                ((AbstractSorterViewHolder) viewHolder).onSortingStatusChanged(state);
-            }
-        }
-    }
-
-    @NonNull
-    public ColumnSortHelper getColumnSortHelper() {
-        if (mColumnSortHelper == null) {
-            // It helps to store sorting state of column headers
-            this.mColumnSortHelper = new ColumnSortHelper(mTableView.getColumnHeaderLayoutManager
-                    ());
-        }
-        return mColumnSortHelper;
     }
 }

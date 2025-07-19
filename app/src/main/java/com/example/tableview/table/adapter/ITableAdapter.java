@@ -32,6 +32,7 @@ import androidx.annotation.Nullable;
 
 import com.example.tableview.table.view.ITableView;
 import com.example.tableview.table.adapter.recyclerview.holder.AbstractViewHolder;
+import com.example.tableview.table.view.model.Cell;
 
 /**
  * Created by evrencoskun on 10/06/2017.
@@ -43,7 +44,7 @@ public interface ITableAdapter<CH, RH, C> {
 
     int getRowHeaderItemViewType(int position);
 
-    int getCellItemViewType(int position);
+    int getCellItemViewType(Cell cell);
 
     View getCornerView();
 

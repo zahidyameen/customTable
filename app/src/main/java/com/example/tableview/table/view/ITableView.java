@@ -35,9 +35,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.tableview.table.adapter.AbstractTableAdapter;
 import com.example.tableview.table.adapter.recyclerview.CellRecyclerView;
-import com.example.tableview.table.filter.Filter;
-import com.example.tableview.table.handler.ColumnSortHandler;
-import com.example.tableview.table.handler.FilterHandler;
 import com.example.tableview.table.handler.ScrollHandler;
 import com.example.tableview.table.handler.SelectionHandler;
 import com.example.tableview.table.handler.VisibilityHandler;
@@ -46,7 +43,7 @@ import com.example.tableview.table.layoutmanager.ColumnHeaderLayoutManager;
 import com.example.tableview.table.listener.ITableViewListener;
 import com.example.tableview.table.listener.scroll.HorizontalRecyclerViewListener;
 import com.example.tableview.table.listener.scroll.VerticalRecyclerViewListener;
-import com.example.tableview.table.sort.SortState;
+
 
 
 /**
@@ -67,7 +64,6 @@ public interface ITableView {
 
     boolean isAllowClickInsideCell();
 
-    boolean isSortable();
 
     @NonNull
     Context getContext();
@@ -102,8 +98,7 @@ public interface ITableView {
     @NonNull
     SelectionHandler getSelectionHandler();
 
-    @Nullable
-    ColumnSortHandler getColumnSortHandler();
+
 
     @NonNull
     VisibilityHandler getVisibilityHandler();
@@ -114,11 +109,7 @@ public interface ITableView {
     @NonNull
     DividerItemDecoration getVerticalItemDecoration();
 
-    @NonNull
-    SortState getSortingStatus(int column);
 
-    @Nullable
-    SortState getRowHeaderSortingStatus();
 
     void scrollToColumnPosition(int column);
 
@@ -156,9 +147,7 @@ public interface ITableView {
 
     int getSeparatorColor();
 
-    void sortColumn(int columnPosition, @NonNull SortState sortState);
 
-    void sortRowHeader(@NonNull SortState sortState);
 
     void remeasureColumnWidth(int column);
 
@@ -200,22 +189,6 @@ public interface ITableView {
 
     @Nullable
     AbstractTableAdapter getAdapter();
-
-    /**
-     * Filters the whole table using the provided Filter object which supports multiple filters.
-     *
-     * @param filter The filter object.
-     */
-    void filter(@NonNull Filter filter);
-
-    /**
-     * Retrieves the FilterHandler of the TableView.
-     *
-     * @return The FilterHandler of the TableView.
-     */
-    @Nullable
-    FilterHandler getFilterHandler();
-
     /**
      * Retrieves the ScrollHandler of the TableView.
      *

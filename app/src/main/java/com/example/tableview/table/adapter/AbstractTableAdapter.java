@@ -36,6 +36,7 @@ import com.example.tableview.table.view.ITableView;
 import com.example.tableview.table.adapter.recyclerview.CellRecyclerViewAdapter;
 import com.example.tableview.table.adapter.recyclerview.ColumnHeaderRecyclerViewAdapter;
 import com.example.tableview.table.adapter.recyclerview.RowHeaderRecyclerViewAdapter;
+import com.example.tableview.table.view.model.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -187,7 +188,7 @@ public abstract class AbstractTableAdapter<CH, RH, C> implements ITableAdapter<C
     }
 
     @Override
-    public int getCellItemViewType(int position) {
+    public int getCellItemViewType(Cell cell) {
         return 0;
     }
 
